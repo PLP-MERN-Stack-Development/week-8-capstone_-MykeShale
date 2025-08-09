@@ -1,15 +1,10 @@
 "use client"
 
-import React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   LineChart,
   Line,
@@ -23,28 +18,9 @@ import {
   AreaChart,
   Area,
 } from "recharts"
-import {
-  Heart,
-  Activity,
-  Thermometer,
-  Weight,
-  Brain,
-  Moon,
-  Footprints,
-  Target,
-  TrendingUp,
-  TrendingDown,
-  Plus,
-  AlertTriangle,
-  CheckCircle,
-  Download,
-  Filter,
-  BarChart3,
-} from "lucide-react"
-import { DashboardLayout } from "@/components/dashboard-layout"
-import { motion } from "framer-motion"
+import { Heart, Activity, Thermometer, Weight, Moon, Footprints, TrendingUp, TrendingDown } from "lucide-react"
 
-export default function HealthMetricsPage() {
+export default function PatientHealthMetricsPage() {
   const [selectedMetric, setSelectedMetric] = useState("bloodPressure")
   const [timeRange, setTimeRange] = useState("week")
   const [selectedGoal, setSelectedGoal] = useState(null)
@@ -269,10 +245,7 @@ export default function HealthMetricsPage() {
   const MetricCard = ({ metric }) => {
     const IconComponent = metric.icon
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ scale: 1.02 }}
+      <div
         className="cursor-pointer"
         onClick={() => setSelectedMetric(metric.id)}
       >
@@ -313,7 +286,7 @@ export default function HealthMetricsPage() {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     )
   }
 
@@ -428,316 +401,4 @@ export default function HealthMetricsPage() {
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="deep" stackId="a" fill="#8b5cf6" name="Deep Sleep" />
-              <Bar dataKey="rem" stackId="a" fill="#06b6d4" name="REM Sleep" />
-              <Bar dataKey="light" stackId="a" fill="#10b981" name="Light Sleep" />
-            </BarChart>
-          </ResponsiveContainer>
-        )
-      case "steps":
-        return (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={selectedMetricData.data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="steps" fill="#f59e0b" name="Steps" />
-            </BarChart>
-          </ResponsiveContainer>
-        )
-      default:
-        return null
-    }
-  }
-
-  return (
-    <DashboardLayout userRole="patient" userName="John Doe" userAvatar="/placeholder.svg?height=48&width=48">
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Health Metrics</h1>
-            <p className="text-gray-600">Track and monitor your health data and progress towards your goals</p>
-          </div>
-          <div className="flex space-x-3">
-            <Button
-              variant="outline"
-              className="border-emerald-200 text-emerald-600 hover:bg-emerald-50 bg-transparent"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export Data
-            </Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Metric
-            </Button>
-          </div>
-        </div>
-
-        {/* Health Overview Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {healthMetrics.map((metric) => (
-            <MetricCard key={metric.id} metric={metric} />
-          ))}
-        </div>
-
-        {/* Main Content */}
-        <Tabs defaultValue="trends" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:grid-cols-none lg:flex bg-white border shadow-sm">
-            <TabsTrigger value="trends" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
-              <BarChart3 className="h-4 w-4 mr-2" />
-              Trends
-            </TabsTrigger>
-            <TabsTrigger value="goals" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
-              <Target className="h-4 w-4 mr-2" />
-              Goals
-            </TabsTrigger>
-            <TabsTrigger value="insights" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
-              <Brain className="h-4 w-4 mr-2" />
-              Insights
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="trends" className="space-y-6">
-            {/* Chart Controls */}
-            <Card className="border-0 shadow-sm bg-white/80 backdrop-blur-sm">
-              <CardContent className="p-6">
-                <div className="flex flex-col lg:flex-row gap-4">
-                  <Select value={selectedMetric} onValueChange={setSelectedMetric}>
-                    <SelectTrigger className="w-full lg:w-64">
-                      <SelectValue placeholder="Select metric" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {healthMetrics.map((metric) => (
-                        <SelectItem key={metric.id} value={metric.id}>
-                          {metric.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={timeRange} onValueChange={setTimeRange}>
-                    <SelectTrigger className="w-full lg:w-48">
-                      <SelectValue placeholder="Time range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="week">Last Week</SelectItem>
-                      <SelectItem value="month">Last Month</SelectItem>
-                      <SelectItem value="quarter">Last 3 Months</SelectItem>
-                      <SelectItem value="year">Last Year</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button variant="outline">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filters
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Chart Display */}
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  {healthMetrics.find((m) => m.id === selectedMetric)?.icon && (
-                    <div className="p-2 bg-emerald-100 rounded-lg">
-                      {React.createElement(healthMetrics.find((m) => m.id === selectedMetric).icon, {
-                        className: "h-5 w-5 text-emerald-600",
-                      })}
-                    </div>
-                  )}
-                  <span>{healthMetrics.find((m) => m.id === selectedMetric)?.name} Trends</span>
-                  <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
-                    {timeRange.replace(/^\w/, (c) => c.toUpperCase())}
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>{renderChart()}</CardContent>
-            </Card>
-
-            {/* Summary Stats */}
-            <div className="grid md:grid-cols-4 gap-4">
-              <Card className="border-0 shadow-lg bg-gradient-to-r from-emerald-500 to-blue-500 text-white">
-                <CardContent className="p-6 text-center">
-                  <div className="text-2xl font-bold mb-1">7.2</div>
-                  <div className="text-sm opacity-90">Average</div>
-                </CardContent>
-              </Card>
-              <Card className="border-0 shadow-lg bg-white">
-                <CardContent className="p-6 text-center">
-                  <div className="text-2xl font-bold text-green-600 mb-1">8.5</div>
-                  <div className="text-sm text-gray-600">Best</div>
-                </CardContent>
-              </Card>
-              <Card className="border-0 shadow-lg bg-white">
-                <CardContent className="p-6 text-center">
-                  <div className="text-2xl font-bold text-red-600 mb-1">6.1</div>
-                  <div className="text-sm text-gray-600">Lowest</div>
-                </CardContent>
-              </Card>
-              <Card className="border-0 shadow-lg bg-white">
-                <CardContent className="p-6 text-center">
-                  <div className="text-2xl font-bold text-blue-600 mb-1">+5%</div>
-                  <div className="text-sm text-gray-600">Improvement</div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="goals" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {healthGoals.map((goal) => (
-                <GoalCard key={goal.id} goal={goal} />
-              ))}
-            </div>
-
-            {/* Goal Details Dialog */}
-            <Dialog open={!!selectedGoal} onOpenChange={() => setSelectedGoal(null)}>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center space-x-2">
-                    {selectedGoal?.icon &&
-                      React.createElement(selectedGoal.icon, {
-                        className: "h-5 w-5 text-emerald-600",
-                      })}
-                    <span>{selectedGoal?.title}</span>
-                  </DialogTitle>
-                  <DialogDescription>
-                    {selectedGoal?.category} • Deadline: {selectedGoal?.deadline}
-                  </DialogDescription>
-                </DialogHeader>
-                {selectedGoal && (
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="text-center p-4 bg-gray-50 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-900">{selectedGoal.current}</div>
-                        <div className="text-sm text-gray-600">Current</div>
-                      </div>
-                      <div className="text-center p-4 bg-emerald-50 rounded-lg">
-                        <div className="text-2xl font-bold text-emerald-600">{selectedGoal.target}</div>
-                        <div className="text-sm text-gray-600">Target</div>
-                      </div>
-                      <div className="text-center p-4 bg-blue-50 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">{selectedGoal.progress}%</div>
-                        <div className="text-sm text-gray-600">Progress</div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-2">
-                        <span>Progress to Goal</span>
-                        <span>{selectedGoal.progress}%</span>
-                      </div>
-                      <Progress value={selectedGoal.progress} className="h-3" />
-                    </div>
-                    <div className="flex space-x-3">
-                      <Button className="bg-emerald-600 hover:bg-emerald-700">Update Progress</Button>
-                      <Button variant="outline">Edit Goal</Button>
-                      <Button variant="outline">Share Progress</Button>
-                    </div>
-                  </div>
-                )}
-              </DialogContent>
-            </Dialog>
-          </TabsContent>
-
-          <TabsContent value="insights" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border-0 shadow-xl bg-gradient-to-br from-emerald-50 to-blue-50">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span>Health Achievements</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-3 p-3 bg-white rounded-lg">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm">Maintained healthy blood pressure for 30 days</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-white rounded-lg">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm">Improved sleep quality by 15% this month</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-white rounded-lg">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    <span className="text-sm">Reached step goal 6 out of 7 days this week</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-xl bg-gradient-to-br from-yellow-50 to-orange-50">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    <span>Areas for Improvement</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-3 p-3 bg-white rounded-lg">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span className="text-sm">Consider increasing daily water intake</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-white rounded-lg">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm">Try to maintain consistent sleep schedule</span>
-                  </div>
-                  <div className="flex items-center space-x-3 p-3 bg-white rounded-lg">
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span className="text-sm">Monitor stress levels during busy periods</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Brain className="h-5 w-5 text-purple-600" />
-                  <span>AI Health Insights</span>
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-700">
-                    Powered by AI
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-2">Weekly Health Summary</h4>
-                  <p className="text-gray-600 text-sm mb-3">
-                    Based on your recent health data, you're showing excellent progress in cardiovascular health and
-                    sleep quality. Your blood pressure has remained stable, and your sleep duration has improved by 12%
-                    compared to last month.
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="outline" className="text-xs">
-                      92% Health Score
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      Trending Up
-                    </Badge>
-                  </div>
-                </div>
-                <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-2">Personalized Recommendations</h4>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-emerald-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                      Continue your current exercise routine - it's showing great results
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                      Consider adding 15 minutes of meditation to improve stress management
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                      Your sleep pattern suggests you're a natural early riser - optimize accordingly
-                    </li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </DashboardLayout>
-  )
-}
+              <Bar dataKey="deep" stackId="a" fill="#8b\
