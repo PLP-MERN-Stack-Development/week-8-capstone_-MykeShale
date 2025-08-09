@@ -1,64 +1,41 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { DashboardLayout } from "@/components/dashboard-layout"
 
-export default function PrivacyLoading() {
+export default function PrivacySecurityLoadingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      <div className="lg:pl-64">
-        <div className="px-4 sm:px-6 lg:px-8 py-8">
-          <div className="space-y-6">
-            {/* Header */}
-            <div className="text-center">
-              <Skeleton className="h-8 w-64 mx-auto mb-2" />
-              <Skeleton className="h-4 w-96 mx-auto" />
-            </div>
-
-            {/* Privacy Controls */}
-            <Card className="border-0 shadow-xl">
-              <CardHeader>
-                <Skeleton className="h-6 w-48" />
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                      <div className="space-y-2">
-                        <Skeleton className="h-4 w-48" />
-                        <Skeleton className="h-3 w-64" />
-                      </div>
-                      <Skeleton className="h-6 w-12 rounded-full" />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Security Settings */}
-            <Card className="border-0 shadow-xl">
-              <CardHeader>
-                <Skeleton className="h-6 w-48" />
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <Skeleton className="h-10 w-10 rounded-full" />
-                      <div className="space-y-2">
-                        <Skeleton className="h-4 w-32" />
-                        <Skeleton className="h-3 w-48" />
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Skeleton className="h-5 w-16" />
-                      <Skeleton className="h-8 w-20" />
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+    <DashboardLayout userRole="patient" userName="Loading User" userAvatar="/placeholder.svg">
+      <div className="space-y-6">
+        {/* Header Skeleton */}
+        <div className="text-center">
+          <Skeleton className="h-9 w-64 mx-auto mb-2" />
+          <Skeleton className="h-6 w-96 mx-auto" />
         </div>
+
+        {/* Tabs List Skeleton */}
+        <Skeleton className="h-10 w-full lg:w-auto" />
+
+        {/* Content Area Skeleton (e.g., Privacy Controls) */}
+        <Card className="border-0 shadow-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Skeleton className="h-5 w-5" />
+              <Skeleton className="h-6 w-48" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i}>
+                  <Skeleton className="h-4 w-32 mb-2" />
+                  <Skeleton className="h-10 w-full" />
+                  {i < 5 && <Skeleton className="h-px w-full mt-4" />}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
