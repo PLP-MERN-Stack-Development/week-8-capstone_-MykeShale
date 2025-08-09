@@ -48,6 +48,7 @@ import {
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useTheme } from "@/components/theme-provider" // Import useTheme hook
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -59,8 +60,8 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children, userRole, userName, userAvatar }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [theme, setTheme] = useState("light")
   const pathname = usePathname()
+  const { setTheme } = useTheme() // Use the setTheme function from the theme context
 
   // Close sidebar on route change (mobile)
   useEffect(() => {
@@ -125,12 +126,6 @@ export function DashboardLayout({ children, userRole, userName, userAvatar }: Da
   }
 
   const menuItems = getMenuItems()
-
-  const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme)
-    document.documentElement.classList.remove("light", "dark")
-    document.documentElement.classList.add(newTheme)
-  }
 
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
@@ -264,13 +259,13 @@ export function DashboardLayout({ children, userRole, userName, userAvatar }: Da
                       <Sun className="mr-2 h-4 w-4" /> Theme <ChevronDown className="ml-auto h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleThemeChange("light")}>
+                      <DropdownMenuItem onClick={() => setTheme("light")}>
                         <Sun className="mr-2 h-4 w-4" /> Light
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleThemeChange("dark")}>
+                      <DropdownMenuItem onClick={() => setTheme("dark")}>
                         <Moon className="mr-2 h-4 w-4" /> Dark
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleThemeChange("system")}>
+                      <DropdownMenuItem onClick={() => setTheme("system")}>
                         <Laptop className="mr-2 h-4 w-4" /> System
                       </DropdownMenuItem>
                     </DropdownMenuContent>
