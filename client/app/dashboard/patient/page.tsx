@@ -26,7 +26,6 @@ import {
   Weight,
 } from "lucide-react"
 import Link from "next/link"
-import { motion } from "framer-motion"
 import { DashboardLayout } from "@/components/dashboard-layout"
 
 export default function PatientDashboard() {
@@ -160,10 +159,69 @@ export default function PatientDashboard() {
     },
   ]
 
+  const MetricCard = ({ metric }) => {
+    const IconComponent = metric.icon
+
+    const getTrendIcon = (trend) => {
+      if (trend === "improving") {
+        return <TrendingUp className="h-4 w-4 text-green-500" />
+      } else if (trend === "decreasing") {
+        return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />
+      }
+      return null
+    }
+
+    const getStatusColor = (status) => {
+      if (status === "normal") {
+        return "bg-green-100 text-green-700"
+      } else if (status === "high") {
+        return "bg-red-100 text-red-700"
+      } else if (status === "low") {
+        return "bg-yellow-100 text-yellow-700"
+      }
+      return "bg-gray-100 text-gray-700"
+    }
+
+    return (
+      <div className="cursor-pointer">
+        <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div className={`p-3 bg-${metric.color}-100 rounded-xl`}>
+                <IconComponent className={`h-6 w-6 text-${metric.color}-600`} />
+              </div>
+              <div className="flex items-center space-x-1">
+                {getTrendIcon(metric.trend)}
+                <span
+                  className={`text-sm font-medium ${
+                    metric.trend === "improving" || metric.trend === "stable" ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {metric.change}
+                </span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-semibold text-gray-900">{metric.label}</h3>
+              <div className="flex items-baseline space-x-2">
+                <span className="text-2xl font-bold text-gray-900">{metric.value}</span>
+                <span className="text-sm text-gray-500">{metric.unit}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <Badge className={`${getStatusColor(metric.status)} border-0 text-xs`}>{metric.status}</Badge>
+                <span className="text-xs text-gray-500">{metric.lastUpdated}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <DashboardLayout userRole="patient" userName="John Doe" userAvatar="/placeholder.svg?height=48&width=48">
       {/* Welcome Section with Health Score */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+      <div className="mb-8">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, John! 👋</h1>
@@ -188,7 +246,7 @@ export default function PatientDashboard() {
             </Card>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-none lg:flex bg-white border shadow-sm">
@@ -218,7 +276,7 @@ export default function PatientDashboard() {
         <TabsContent value="overview" className="space-y-6">
           {/* Quick Actions */}
           <div className="grid md:grid-cols-4 gap-4">
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link href="/book-appointment">
                 <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-emerald-50 to-emerald-100 cursor-pointer">
                   <CardContent className="p-6 text-center">
@@ -230,9 +288,9 @@ export default function PatientDashboard() {
                   </CardContent>
                 </Card>
               </Link>
-            </motion.div>
+            </div>
 
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link href="/messages">
                 <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-blue-50 to-blue-100 cursor-pointer">
                   <CardContent className="p-6 text-center">
@@ -244,9 +302,9 @@ export default function PatientDashboard() {
                   </CardContent>
                 </Card>
               </Link>
-            </motion.div>
+            </div>
 
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link href="/telemedicine">
                 <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-purple-50 to-purple-100 cursor-pointer">
                   <CardContent className="p-6 text-center">
@@ -258,9 +316,9 @@ export default function PatientDashboard() {
                   </CardContent>
                 </Card>
               </Link>
-            </motion.div>
+            </div>
 
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link href="/emergency">
                 <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-red-50 to-red-100 cursor-pointer">
                   <CardContent className="p-6 text-center">
@@ -272,7 +330,7 @@ export default function PatientDashboard() {
                   </CardContent>
                 </Card>
               </Link>
-            </motion.div>
+            </div>
           </div>
 
           {/* Health Metrics */}
@@ -291,11 +349,8 @@ export default function PatientDashboard() {
                 {healthMetrics.map((metric, index) => {
                   const IconComponent = metric.icon
                   return (
-                    <motion.div
+                    <div
                       key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
                       className="text-center p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl border"
                     >
                       <div
@@ -317,7 +372,7 @@ export default function PatientDashboard() {
                         {metric.status}
                       </Badge>
                       <div className="text-xs text-gray-500 mt-1">{metric.lastUpdated}</div>
-                    </motion.div>
+                    </div>
                   )
                 })}
               </div>
@@ -343,11 +398,8 @@ export default function PatientDashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {upcomingAppointments.slice(0, 3).map((appointment, index) => (
-                  <motion.div
+                  <div
                     key={appointment.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
                     className="flex items-center space-x-4 p-4 bg-gradient-to-r from-gray-50 to-white rounded-xl border hover:shadow-md transition-shadow"
                   >
                     <Avatar className="border-2 border-emerald-200">
@@ -393,7 +445,7 @@ export default function PatientDashboard() {
                         </Button>
                       )}
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </CardContent>
             </Card>
@@ -415,13 +467,7 @@ export default function PatientDashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {medications.map((medication, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border"
-                  >
+                  <div key={index} className="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border">
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-semibold text-gray-900">{medication.name}</h4>
@@ -443,7 +489,7 @@ export default function PatientDashboard() {
                       </div>
                       <Progress value={(medication.remaining / medication.total) * 100} className="h-2" />
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </CardContent>
             </Card>
@@ -465,13 +511,7 @@ export default function PatientDashboard() {
               {aiInsights.map((insight, index) => {
                 const IconComponent = insight.icon
                 return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="p-4 bg-white rounded-xl border shadow-sm"
-                  >
+                  <div key={index} className="p-4 bg-white rounded-xl border shadow-sm">
                     <div className="flex items-start space-x-4">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -495,7 +535,7 @@ export default function PatientDashboard() {
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )
               })}
             </CardContent>
