@@ -135,7 +135,7 @@ export function DashboardLayout({ children, userRole, userName, userAvatar }: Da
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
       {/* Sidebar for Desktop */}
-      <aside className="sticky top-0 hidden w-64 flex-col border-r bg-white p-4 lg:flex shadow-lg">
+      <aside className="hidden w-64 flex-col border-r bg-white p-4 lg:flex shadow-lg">
         <div className="flex items-center justify-center h-16 border-b mb-6">
           <Link href="/" className="flex items-center gap-2 font-semibold text-emerald-600 text-2xl">
             <Heart className="h-8 w-8" />
